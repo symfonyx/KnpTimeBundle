@@ -64,29 +64,35 @@ class TimeHelper extends Helper
     public function timeFormat($time, $format = null)
     {
         $formats = [
-            'short' => 0,
-            'full' => 1,
-            'tiny' => 2
+            'short' => [
+                ['year','years'], ['month','months'], ['week','weeks'], ['day','days'], ['hour','hours'], ['min'], ['sec']
+            ],
+            'full' => [
+                ['year','years'], ['month','months'], ['week','weeks'], ['day','days'], ['hour','hours'], ['minute','minutes'], ['second','seconds']
+            ],
+            'tiny' => [
+                ['y'], ['m'], ['w'], ['d'], ['h'], ['m'], ['s']
+            ]
         ];
         $units = [
-            31536000 => ['year', 'year', 'y'],
-            2592000 => ['month', 'month', 'm'],
-            604800 => ['week', 'week', 'w'],
-            86400 => ['day', 'day', 'd'],
-            3600 => ['hour', 'hour', 'h'],
-            60 => ['min', 'minute', 'm'],
-            1 => ['sec', 'second', 's']
+            31536000, // year
+            2592000,  // month
+            604800,   // week
+            86400,    // day
+            3600,     // hour
+            60,       // minute
+            1         // second
         ];
         $parts = [];
-        $level = !is_null($format) && isset($formats[$format]) ? $formats[$format] : 0;
+        $format = !is_null($format) && isset($formats[$format]) ? $format : 'short';
 
-        foreach ($units as $unit => $val) {
+        foreach ($units as $index => $unit) {
             if ($time < $unit) continue;
-            $suffix = $val[$level];
 
             $numberOfUnits = (int) floor($time / $unit);
             if ($numberOfUnits > 0) {
-                $parts[] = "$numberOfUnits $suffix" . (($level > 1 || !in_array($suffix, ['min', 'sec']) || $numberOfUnits > 1) ? "s" : "");
+                $suffix = ($numberOfUnits > 1 && isset($formats[$format][$index][1])) ? $formats[$format][$index][1] : $formats[$format][$index][0];
+                $parts[] = "$numberOfUnits $suffix";
                 $time = $time - $numberOfUnits * $unit;
             }
         }
