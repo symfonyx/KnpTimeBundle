@@ -86,7 +86,7 @@ class TimeHelper extends Helper
 
             $numberOfUnits = (int) floor($time / $unit);
             if ($numberOfUnits > 0) {
-                $parts[] = "$numberOfUnits $suffix" . (($shortLevel > 1 || !in_array($suffix, ['min', 'sec']) || $numberOfUnits > 1) ? "s" : "");
+                $parts[] = "$numberOfUnits $suffix" . (($level > 1 || !in_array($suffix, ['min', 'sec']) || $numberOfUnits > 1) ? "s" : "");
                 $time = $time - $numberOfUnits * $unit;
             }
         }
