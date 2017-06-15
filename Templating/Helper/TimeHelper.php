@@ -53,6 +53,39 @@ class TimeHelper extends Helper
         return new DateTime($datetime);
     }
 
+    /**
+     * Return formatted time
+     *
+     * @param int $time The time in seconds
+     *
+     * @return string
+     */
+    public function timeFormat($time)
+    {
+        $units = [
+            31536000 => 'year',
+            2592000 => 'month',
+            604800 => 'week',
+            86400 => 'day',
+            3600 => 'hour',
+            60 => 'minute',
+            1 => 'second'
+        ];
+        $parts = [];
+
+        foreach ($units as $unit => $val) {
+            if ($time < $unit) continue;
+
+            $numberOfUnits = (int) floor($time / $unit);
+            if ($numberOfUnits > 0) {
+                $parts[] = "$numberOfUnits $val" . ($numberOfUnits > 1 ? "s" : "");
+                $time = $time - $numberOfUnits * $unit;
+            }
+        }
+
+        return implode(' ', $parts);
+    }
+
     public function getName()
     {
         return 'time';

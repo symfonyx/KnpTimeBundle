@@ -39,6 +39,11 @@ class TimeExtension extends \Twig_Extension
                     array($this, 'diff'), 
                     array('is_safe' => array('html'))
                 ),
+            new \Twig_SimpleFunction(
+                    'time_format', 
+                    array($this, 'timeFormat'), 
+                    array('is_safe' => array('html'))
+                ),
         );
     }
 
@@ -50,12 +55,22 @@ class TimeExtension extends \Twig_Extension
                     array($this, 'diff'), 
                     array('is_safe' => array('html'))
                 ),
+            new \Twig_SimpleFilter(
+                    'time', 
+                    array($this, 'timeFormat'), 
+                    array('is_safe' => array('html'))
+                ),
         );
     }
 
     public function diff($since = null, $to = null)
     {
         return $this->helper->diff($since, $to);
+    }
+
+    public function timeFormat($time = null)
+    {
+        return $this->helper->timeFormat($time);
     }
 
     /**
