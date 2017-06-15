@@ -68,9 +68,9 @@ class TimeExtension extends \Twig_Extension
         return $this->helper->diff($since, $to);
     }
 
-    public function timeFormat($time = null)
+    public function timeFormat($time = null, $format = null)
     {
-        return $this->helper->timeFormat($time);
+        return $this->helper->timeFormat($time, $format);
     }
 
     /**

@@ -57,28 +57,36 @@ class TimeHelper extends Helper
      * Return formatted time
      *
      * @param int $time The time in seconds
+     * @param int $format The time format (short, full, tiny)
      *
      * @return string
      */
-    public function timeFormat($time)
+    public function timeFormat($time, $format = null)
     {
+        $formats = [
+            'short' => 0,
+            'full' => 1,
+            'tiny' => 2
+        ];
         $units = [
-            31536000 => 'year',
-            2592000 => 'month',
-            604800 => 'week',
-            86400 => 'day',
-            3600 => 'hour',
-            60 => 'minute',
-            1 => 'second'
+            31536000 => ['year', 'year', 'y'],
+            2592000 => ['month', 'month', 'm'],
+            604800 => ['week', 'week', 'w'],
+            86400 => ['day', 'day', 'd'],
+            3600 => ['hour', 'hour', 'h'],
+            60 => ['min', 'minute', 'm'],
+            1 => ['sec', 'second', 's']
         ];
         $parts = [];
+        $level = !is_null($format) && isset($formats[$format]) ? $formats[$format] : 0;
 
         foreach ($units as $unit => $val) {
             if ($time < $unit) continue;
+            $suffix = $val[$level];
 
             $numberOfUnits = (int) floor($time / $unit);
             if ($numberOfUnits > 0) {
-                $parts[] = "$numberOfUnits $val" . ($numberOfUnits > 1 ? "s" : "");
+                $parts[] = "$numberOfUnits $suffix" . (($shortLevel > 1 || !in_array($suffix, ['min', 'sec']) || $numberOfUnits > 1) ? "s" : "");
                 $time = $time - $numberOfUnits * $unit;
             }
         }
