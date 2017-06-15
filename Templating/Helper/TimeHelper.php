@@ -92,7 +92,7 @@ class TimeHelper extends Helper
             $numberOfUnits = (int) floor($time / $unit);
             if ($numberOfUnits > 0) {
                 $suffix = ($numberOfUnits > 1 && isset($formats[$format][$index][1])) ? $formats[$format][$index][1] : $formats[$format][$index][0];
-                $parts[] = "$numberOfUnits $suffix";
+                $parts[] = $format == 'tiny' ? "$numberOfUnits$suffix" : "$numberOfUnits $suffix";
                 $time = $time - $numberOfUnits * $unit;
             }
         }
